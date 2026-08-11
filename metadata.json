@@ -1,0 +1,6 @@
+{
+  "name": "NovaOS - Web Operating System",
+  "description": "A modern web-based operating system with geometric dark glassmorphism UI, window manager, virtual apps, and Gemini-powered Nova AI Assistant.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
