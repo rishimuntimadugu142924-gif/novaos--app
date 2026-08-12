@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+@layer base {
+  html, body, #root {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  body {
+    background-color: #0f172a;
+    color: white;
+  }
+}
+
+@layer utilities {
+  /* Hide scrollbar utility */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Ensure taskbar stays on top */
+  .taskbar-layer {
+    z-index: 9999 !important;
+  }
+
+  /* Context menu should be above everything */
+  .context-menu-layer {
+    z-index: 10000 !important;
+  }
+
+  /* Toast notifications above windows */
+  .toast-layer {
+    z-index: 10001 !important;
+  }
+
+  /* Lock screen above everything */
+  .lockscreen-layer {
+    z-index: 10002 !important;
+  }
+
+  /* Window base layer */
+  .window-layer {
+    z-index: 100;
+  }
+
+  /* Desktop icons layer */
+  .desktop-icons-layer {
+    z-index: 50;
+  }
+
+  /* Dot grid overlay */
+  .grid-overlay {
+    z-index: 1;
+    pointer-events: none;
+  }
+}

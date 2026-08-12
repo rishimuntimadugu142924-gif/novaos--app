@@ -30,7 +30,6 @@ export const Taskbar: React.FC = () => {
       if (existing.minimized || activeWindowId !== existing.id) {
         focusWindow(existing.id);
       } else {
-        // If already active, open another window or focus
         focusWindow(existing.id);
       }
     } else {
@@ -43,60 +42,33 @@ export const Taskbar: React.FC = () => {
       {isStartOpen && <StartMenu />}
 
       {/* Floating Bottom Dock Container */}
-      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 w-[720px] max-w-[94vw] h-[64px] bg-black/40 backdrop-blur-3xl border border-white/10 rounded-2xl flex items-center justify-between px-4 shadow-2xl z-[900] select-none">
-        
+      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 w-[720px] max-w-[94vw] h-[64px] bg-black/40 backdrop-blur-3xl border border-white/10 rounded-2xl flex items-center justify-between px-4 shadow-2xl taskbar-layer select-none">
+
         {/* Start Button */}
-        <div 
+        <button 
           onClick={toggleStartMenu}
-          className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer mr-2 border ${
-            isStartOpen ? 'bg-blue-500/30 border-blue-400/50' : 'bg-white/10 border-white/10 hover:bg-white/20'
-          }`}
-          title="Start Menu"
+          className="w-10 h-10 bg-white/5 hover:bg-white/10 rounded-xl flex items-center justify-center transition-all"
         >
-          <div className="w-5 h-5 grid grid-cols-2 gap-0.5">
-            <div className="bg-white/80 rounded-[1px]" />
-            <div className="bg-white/80 rounded-[1px]" />
-            <div className="bg-white/80 rounded-[1px]" />
-            <div className="bg-white/80 rounded-[1px]" />
-          </div>
+          <div className="w-5 h-5 bg-gradient-to-tr from-blue-500 to-indigo-500 rounded-md" />
+        </button>
+
+        {/* App Icons */}
+        <div className="flex items-center gap-1">
+          {appIcons.map(app => (
+            <button
+              key={app.id}
+              onClick={() => handleAppClick(app.id)}
+              className="w-10 h-10 hover:bg-white/10 rounded-xl flex items-center justify-center transition-all relative group"
+              title={app.name}
+            >
+              {app.icon}
+              {/* Active indicator dot */}
+              {windows.some(w => w.appId === app.id && !w.minimized) && (
+                <div className="absolute bottom-1 w-1 h-1 bg-white rounded-full" />
+              )}
+            </button>
+          ))}
         </div>
-
-        <div className="h-8 w-[1px] bg-white/10 mx-2" />
-
-        {/* Pinned App Icons Dock */}
-        <div className="flex-1 flex justify-center gap-3">
-          {appIcons.map(app => {
-            const runningWin = windows.find(w => w.appId === app.id);
-            const isRunning = !!runningWin;
-            const isActive = isRunning && activeWindowId === runningWin.id && !runningWin.minimized;
-
-            return (
-              <div 
-                key={app.id}
-                onClick={() => handleAppClick(app.id)}
-                className={`w-10 h-10 rounded-xl flex items-center justify-center relative cursor-pointer transition-all ${
-                  isActive 
-                    ? 'bg-blue-500/25 border border-blue-500/40 shadow-lg shadow-blue-500/10' 
-                    : isRunning
-                    ? 'bg-white/10 border border-white/10 hover:bg-white/15'
-                    : 'bg-white/5 border border-white/5 hover:bg-white/10'
-                }`}
-                title={app.name}
-              >
-                {app.icon}
-
-                {/* Running Active Dot */}
-                {isRunning && (
-                  <div className={`absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full ${
-                    isActive ? 'bg-blue-400 ring-2 ring-blue-400/30' : 'bg-slate-400'
-                  }`} />
-                )}
-              </div>
-            );
-          })}
-        </div>
-
-        <div className="h-8 w-[1px] bg-white/10 mx-2" />
 
         {/* System Tray */}
         <SystemTray />

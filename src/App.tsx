@@ -30,7 +30,11 @@ const MainLayout: React.FC = () => {
     <div className="w-screen h-screen overflow-hidden relative bg-slate-950 text-slate-100 select-none font-sans">
       <Desktop />
       <Taskbar />
-      {isLocked && <LockScreen />}
+      {isLocked && (
+        <div className="fixed inset-0 lockscreen-layer">
+          <LockScreen />
+        </div>
+      )}
     </div>
   );
 };

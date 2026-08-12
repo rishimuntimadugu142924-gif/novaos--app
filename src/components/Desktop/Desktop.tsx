@@ -114,7 +114,7 @@ export const Desktop: React.FC = () => {
     >
       {/* Geometric Dot Grid Overlay */}
       <div 
-        className="absolute inset-0 opacity-20 pointer-events-none" 
+        className="absolute inset-0 opacity-20 grid-overlay" 
         style={{
           backgroundImage: 'radial-gradient(#ffffff 0.5px, transparent 0.5px)',
           backgroundSize: '32px 32px',
@@ -122,7 +122,7 @@ export const Desktop: React.FC = () => {
       />
 
       {/* Desktop Icons Left Column Grid */}
-      <div className="absolute top-12 left-12 grid grid-cols-1 gap-6 w-24 z-10 max-h-[85vh] overflow-y-auto no-scrollbar">
+      <div className="absolute top-12 left-12 grid grid-cols-1 gap-6 w-24 desktop-icons-layer max-h-[85vh] overflow-y-auto no-scrollbar">
         {desktopIcons.map((item, idx) => (
           <div 
             key={idx}
@@ -157,7 +157,7 @@ export const Desktop: React.FC = () => {
               ) : (
                 <FileText size={26} className="text-blue-400" />
               )}
-              
+
               {/* Desktop Delete Hover Icon */}
               <button
                 onClick={(e) => {
@@ -178,7 +178,9 @@ export const Desktop: React.FC = () => {
       </div>
 
       {/* Floating System Toast Container */}
-      <ToastContainer />
+      <div className="toast-layer fixed top-4 right-4">
+        <ToastContainer />
+      </div>
 
       {/* Windows Manager Layer */}
       {windows.map(win => (
@@ -189,11 +191,13 @@ export const Desktop: React.FC = () => {
 
       {/* Context Menu */}
       {contextMenuPos && (
-        <ContextMenu 
-          x={contextMenuPos.x} 
-          y={contextMenuPos.y} 
-          onClose={() => setContextMenuPos(null)} 
-        />
+        <div className="context-menu-layer fixed" style={{ top: contextMenuPos.y, left: contextMenuPos.x }}>
+          <ContextMenu 
+            x={contextMenuPos.x} 
+            y={contextMenuPos.y} 
+            onClose={() => setContextMenuPos(null)} 
+          />
+        </div>
       )}
     </div>
   );
