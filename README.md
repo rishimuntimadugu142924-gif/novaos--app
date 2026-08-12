@@ -1,20 +1,40 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-# Run and deploy your AI Studio app
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
 
-This contains everything you need to run your app locally.
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
 
-View your app in AI Studio: https://ai.studio/apps/50e8fdc9-fee5-48ff-b079-75fbe981223b
+  try {
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer sk-or-v1-000000000000000000000000000000000000000000000000'
+      },
+      body: JSON.stringify({
+        model: 'mistralai/mistral-7b-instruct',
+        messages: [{ role: 'user', content: req.body.prompt || 'Hello' }]
+      })
+    });
 
-## Run Locally
+    const data = await response.json();
 
-**Prerequisites:**  Node.js
+    if (!response.ok) {
+      return res.status(response.status).json({
+        error: data.error?.message || 'API error'
+      });
+    }
 
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+    const text = data.choices?.[0]?.message?.content || 'No response';
+    return res.status(200).json({ text });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+}
